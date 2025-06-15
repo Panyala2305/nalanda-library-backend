@@ -9,6 +9,8 @@ const borrowRoutes = require('./routes/borrow');
 const graphqlSchema = require('./GraphQL/schema');
 const graphqlResolvers = require('./GraphQL/resolvers');
 const { graphqlHTTP } = require('express-graphql');
+const swaggerUi = require('swagger-ui-express'); 
+const swaggerSpec = require('./swagger'); 
 
 dotenv.config();
 connectDB();
@@ -21,12 +23,13 @@ app.use(cors({
   credentials: true,
 }));
 app.use(express.json());
-app.use(authMiddleware); 
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.get('/', (req, res) => {
   res.send('✅ Backend (Nalanda Library managemnt) is running successfully!');
 });
 
 app.use('/api/auth', authRoutes);
+app.use(authMiddleware); 
 app.use('/api/books', bookRoutes);
 app.use('/api', borrowRoutes);
 

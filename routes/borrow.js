@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const auth = require('../middlewares/auth');
+const authorize = require('../middlewares/role');
 const {
   borrowBook,
   returnBook,
@@ -15,7 +16,7 @@ router.post('/return/:bookId', auth, returnBook);
 router.get('/history', auth, viewHistory);
 
 router.get('/report/most-borrowed', auth, mostBorrowedBooks);
-router.get('/report/active-members', auth, activeMembers);
+router.get('/report/active-members', auth,authorize('Admin'), activeMembers);
 router.get('/report/book-availability', auth, bookAvailability);
 
 module.exports = router;
